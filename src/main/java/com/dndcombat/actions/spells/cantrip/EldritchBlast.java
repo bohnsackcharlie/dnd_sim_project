@@ -17,6 +17,8 @@ import com.dndcombat.effects.EffectHook;
 import com.dndcombat.enums.AttackType;
 import com.dndcombat.enums.DamageType;
 
+// TODO another poor implementation that needs to be reworked. 
+
 public class EldritchBlast extends Cantrip {
 
     public EldritchBlast(int scalingTier) {
@@ -35,7 +37,6 @@ public class EldritchBlast extends Cantrip {
 
         int totalDamageDealt = 0;
 
-        // Calculate number of beams based on caster level (PHB'24)
         int numBeams = getScalingTier() >= 17 ? 4 :
                        getScalingTier() >= 11 ? 3 :
                        getScalingTier() >= 5 ? 2 : 1;

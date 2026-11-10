@@ -9,6 +9,7 @@ import com.dndcombat.core.combat.CombatLog;
 import com.dndcombat.core.context.DamageContext;
 import com.dndcombat.core.context.EffectContext;
 import com.dndcombat.core.creatures.Creature;
+import com.dndcombat.core.dice.DiceRoller;
 import com.dndcombat.effects.EffectHook;
 import com.dndcombat.enums.AbilityType;
 import com.dndcombat.enums.DamageType;
@@ -28,7 +29,6 @@ public class MagicMissile extends Spell {
         List<Creature> targets = context.getTargets();
         CombatLog log = context.getCombatManager().getLog();
 
-        int saveDC = getSpellSaveDC(caster);
         log.logMessage(String.format("%s casts %s!", caster.getName(), name));
 
         // Always hits (no saving throw) - creates 3 missiles

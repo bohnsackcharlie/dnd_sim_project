@@ -1,68 +1,71 @@
-package com.dndcombat.actions.spells.cantrip;
+// package com.dndcombat.actions.spells.cantrip;
 
-import com.dndcombat.actions.ActionType;
-import com.dndcombat.actions.TargetingRequirements;
-import com.dndcombat.actions.spells.Cantrip;
-import com.dndcombat.actions.spells.School;
-import com.dndcombat.core.combat.ActionResult;
-import com.dndcombat.core.combat.CombatLog;
-import com.dndcombat.core.context.DamageContext;
-import com.dndcombat.core.context.EffectContext;
-import com.dndcombat.core.creatures.Creature;
-import com.dndcombat.core.dice.DiceRoller;
-import com.dndcombat.effects.EffectHook;
-import com.dndcombat.enums.AbilityType;
-import com.dndcombat.enums.DamageType;
+// import com.dndcombat.actions.ActionType;
+// import com.dndcombat.actions.TargetingRequirements;
+// import com.dndcombat.actions.spells.Cantrip;
+// import com.dndcombat.actions.spells.School;
+// import com.dndcombat.core.combat.ActionResult;
+// import com.dndcombat.core.combat.CombatLog;
+// import com.dndcombat.core.context.DamageContext;
+// import com.dndcombat.core.context.EffectContext;
+// import com.dndcombat.core.creatures.Creature;
+// import com.dndcombat.core.dice.DiceRoller;
+// import com.dndcombat.effects.EffectHook;
+// import com.dndcombat.enums.AbilityType;
+// import com.dndcombat.enums.DamageType;
 
-public class PoisonSpray extends Cantrip {
 
-    public PoisonSpray() {
-        super("Poison Spray", School.NECROMANCY, ActionType.REACTION, 0);
-        this.targetingReqs = new TargetingRequirements(1, 1, true, 60);
-    }
+// commenting out for documentation purposes, this is a bad implementation from Qwen3.5 with claude
 
-    @Override
-    public ActionResult execute(EffectContext context) {
-        Creature caster = context.getActionUser();
-        Creature target = context.getPrimaryTarget();
+// public class PoisonSpray extends Cantrip {
 
-        // Use Intelligence for DC if spellcasting ability
-        int saveDC = getSpellSaveDC(caster);
+//     public PoisonSpray() {
+//         super("Poison Spray", School.NECROMANCY, ActionType.REACTION, 0);
+//         this.targetingReqs = new TargetingRequirements(1, 1, true, 60);
+//     }
 
-        // Create DamageContext directly (no attack roll needed for cantrip damage)
-        int damageRoll = DiceRoller.roll(1, 4);
-        logDamageRoll("d4", damageRoll, 0, damageRoll, DamageType.POISON);
+//     @Override
+//     public ActionResult execute(EffectContext context) {
+//         Creature caster = context.getActionUser();
+//         Creature target = context.getPrimaryTarget();
 
-        DamageContext damageCtx = new DamageContext(context, damageRoll, DamageType.POISON);
+//         // Use Intelligence for DC if spellcasting ability
+//         int saveDC = getSpellSaveDC(caster);
 
-        // BEFORE_DAMAGE hooks
-        caster.triggerEffects(EffectHook.BEFORE_DAMAGE_DEALT, damageCtx);
-        target.triggerEffects(EffectHook.BEFORE_DAMAGE_TAKEN, damageCtx);
+//         // Create DamageContext directly (no attack roll needed for cantrip damage)
+//         int damageRoll = DiceRoller.roll(1, 4);
+//         logDamageRoll("d4", damageRoll, 0, damageRoll, DamageType.POISON);
 
-        int totalDamage = damageCtx.calculateFinalDamage();
-        target.takeDamage(totalDamage);
+//         DamageContext damageCtx = new DamageContext(context, damageRoll, DamageType.POISON);
 
-        logMessage(String.format("%s makes a ranged attack against %s — %d poison damage (DC %d CON save)",
-                caster.getName(), target.getName(), totalDamage, saveDC));
+//         // BEFORE_DAMAGE hooks
+//         caster.triggerEffects(EffectHook.BEFORE_DAMAGE_DEALT, damageCtx);
+//         target.triggerEffects(EffectHook.BEFORE_DAMAGE_TAKEN, damageCtx);
 
-        return ActionResult.success();
-    }
+//         int totalDamage = damageCtx.calculateFinalDamage();
+//         target.takeDamage(totalDamage);
 
-    protected CombatLog getCombatLog() {
-        return context.getCombatManager().getLog();
-    }
+//         logMessage(String.format("%s makes a ranged attack against %s — %d poison damage (DC %d CON save)",
+//                 caster.getName(), target.getName(), totalDamage, saveDC));
 
-    private void logMessage(String message) {
-        getCombatLog().logMessage(message);
-    }
+//         return ActionResult.success();
+//     }
 
-    private void logDamageRoll(String weaponName, int diceResult, int bonus, int total,
-                                DamageType damageType) {
-        getCombatLog().logDamageRoll(weaponName, diceResult, bonus, total, damageType);
-    }
+//     protected CombatLog getCombatLog() {
+//         return context.getCombatManager().getLog();
+//     }
 
-    @Override
-    protected AbilityType getSpellcastingAbility(Creature caster) {
-        return AbilityType.INTELLIGENCE;
-    }
-}
+//     private void logMessage(String message) {
+//         getCombatLog().logMessage(message);
+//     }
+
+//     private void logDamageRoll(String weaponName, int diceResult, int bonus, int total,
+//                                 DamageType damageType) {
+//         getCombatLog().logDamageRoll(weaponName, diceResult, bonus, total, damageType);
+//     }
+
+//     @Override
+//     protected AbilityType getSpellcastingAbility(Creature caster) {
+//         return AbilityType.INTELLIGENCE;
+//     }
+// }

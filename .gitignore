@@ -1,1 +1,26 @@
 .aider*
+
+# Build artifacts
+target/
+build/
+
+# Compiled class files
+*.class
+
+# JAR files (if not in target/)
+*.jar
+
+# Log files
+*.log
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# Editor backup files
+*.swp
+*~
+
+# OS specific
+.DS_Store

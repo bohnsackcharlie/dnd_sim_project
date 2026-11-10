@@ -28,6 +28,7 @@ public abstract class Creature {
     private int maxHP;
     private int armorClass;
     private int proficiencyBonus;
+    private int movementSpeed; //max amount of speed that can be used on a turn, currently unused
 
     // Ability Scores (stored as primitives)
     private int strength;
