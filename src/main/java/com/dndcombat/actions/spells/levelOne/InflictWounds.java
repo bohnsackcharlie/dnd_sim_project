@@ -22,6 +22,7 @@ public class InflictWounds extends Spell {
     public InflictWounds() {
         super("Inflict Wounds", 1, School.NECROMANCY, ActionType.ACTION);
         this.targetingReqs = new TargetingRequirements(1, 1, true, 0); // Touch range (0)
+        this.description = "A creature you touch makes a Constitution saving throw, taking 2d10 Necrotic damage on a failed save or half as much damage on a successful one.";
     }
 
     @Override

@@ -30,6 +30,7 @@ public abstract class Spell extends Action {
     }
 
     protected AbilityType getSpellcastingAbility(Creature caster) {
+        // TODO this comment below is dumb, we probably should just have spellsave DC on the creature itself, we don't need to worry about multi-classing and different DCs I don't think
         // Default to intelligence; subclasses can override for WIS/CHA casters
         return AbilityType.INTELLIGENCE;
     }
@@ -54,5 +55,20 @@ public abstract class Spell extends Action {
 
     public ActionType getCastingTime() {
         return castingTime;
+    }
+
+    @Override
+    public String getDescription(Creature user) {
+        //append attack bonus and save dc to description
+        return """
+                %s.
+                Attack bonus: %+d.
+                Spell Save DC: %d.
+                """
+                .formatted(
+                        getDescription(),
+                        getSpellAttackBonus(user),
+                        getSpellSaveDC(user)
+                ).strip();
     }
 }

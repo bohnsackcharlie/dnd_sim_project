@@ -29,7 +29,7 @@ public abstract class Action {
 
     public abstract ActionResult execute(EffectContext context);
 
-    public boolean canUse(Creature user, EffectContext context) {
+    public boolean canUse(Creature user) {
         return switch (actionType) {
             case ACTION -> !user.isActionUsed();
             case BONUS_ACTION -> !user.isBonusActionUsed();
@@ -98,6 +98,10 @@ public abstract class Action {
     }
 
     public String getDescription() {
+        return description;
+    }
+
+    public String getDescription(Creature user) {
         return description;
     }
 

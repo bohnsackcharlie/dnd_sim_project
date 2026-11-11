@@ -22,6 +22,8 @@ public class WeaponAttack extends Action {
         super(weapon.getName() + " Attack", ActionType.ACTION,
               TargetingRequirements.singleHostile(weapon.getRange()));
         this.weapon = weapon;
+        // TODO we can probably add more info to this description conditionally on its range, properties, magic bonus etc, should break out into its own method at that point
+        this.description = "Use the Attack action to attack with your " + weapon.getName() + ", dealing " + weapon.getDamageDieCount() + "d" + weapon.getDamageDice() + " " + weapon.getDamageType().name() + " damage to the selected target.";
     }
 
     @Override
@@ -80,6 +82,27 @@ public class WeaponAttack extends Action {
         }
 
         return ActionResult.miss();
+    }
+
+    @Override
+    public String getDescription(Creature user) {
+        // TODO break these out into their own actions if they get more complicated
+        int attackBonus = user.getAttackBonus(weapon) + weapon.getMagicBonus();
+        int damageBonus = user.getDamageBonus(weapon) + weapon.getMagicBonus();
+
+        return """
+                Use the Attack action to attack with your %s.
+                Attack bonus: %+d.
+                Damage: %dd%d %+d %s.
+                """
+                .formatted(
+                        weapon.getName(),
+                        attackBonus,
+                        weapon.getDamageDieCount(),
+                        weapon.getDamageDice(),
+                        damageBonus,
+                        weapon.getDamageType().name()
+                ).strip();
     }
 
     public boolean isMelee() {

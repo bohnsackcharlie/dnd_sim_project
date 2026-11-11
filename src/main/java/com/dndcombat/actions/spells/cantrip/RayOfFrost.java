@@ -20,6 +20,7 @@ public class RayOfFrost extends Cantrip {
     public RayOfFrost(int scalingTier) {
         super("Ray of Frost", School.EVOCATION, ActionType.ACTION, scalingTier);
         this.targetingReqs = new TargetingRequirements(1, 1, true, 60);
+        this.description = "A frigid beam of blue-white light streaks toward a creature within range. Make a ranged spell attack against the target. On a hit, it takes 1d8 Cold damage, and its Speed is reduced by 10 feet until the start of your next turn.";
     }
 
     @Override

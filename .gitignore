@@ -24,3 +24,6 @@ build/
 
 # OS specific
 .DS_Store
+
+# Personal notes (todos, running on my machine etc)
+README(personal)

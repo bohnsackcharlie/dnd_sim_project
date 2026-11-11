@@ -2,9 +2,7 @@ package com.dndcombat.core.creatures;
 
 import com.dndcombat.enums.AbilityType;
 
-import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.Map;
 import java.util.Set;
 
 public class Skills {

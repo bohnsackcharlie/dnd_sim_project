@@ -22,6 +22,8 @@ public abstract class Creature {
     private String name;
     private Team team;
     private CreatureType creatureType;
+    private static int nextId = 1;
+    private final int id = nextId++;
 
     // Core Stats
     private int currentHP;
@@ -193,6 +195,7 @@ public abstract class Creature {
         return isAlive();
     }
 
+    // TODO this is redundant with the later standard getters and setters
     public boolean hasReactionAvailable() {
         return !reactionUsed;
     }
@@ -321,6 +324,10 @@ public abstract class Creature {
     }
 
     // --- Getters & Setters ---
+
+    public int getId() {
+        return id;
+    }
 
     public String getName() {
         return name;

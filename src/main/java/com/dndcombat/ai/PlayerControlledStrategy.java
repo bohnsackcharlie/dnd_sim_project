@@ -8,6 +8,7 @@ import com.dndcombat.ui.InputHandler;
 
 import java.util.List;
 
+// manual control of monsters
 public class PlayerControlledStrategy implements BehaviorStrategy {
 
     private final InputHandler inputHandler;
