@@ -93,6 +93,18 @@ public abstract class Creature {
         this.availableBonusActions = new ArrayList<>();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Creature other)) return false;
+        return this.id == other.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
+    }
+
     // --- Ability Score Access ---
 
     public int getAbilityScore(AbilityType type) {

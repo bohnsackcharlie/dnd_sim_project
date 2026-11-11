@@ -9,6 +9,7 @@ import com.dndcombat.core.creatures.Creature;
 public class CombatSnapshotFactory {
 
     // maybe at some point this should also take the combat manager and/or info like initiative order
+    // TODO right now the self snapshot is the same as the others. We should have it include stuff like availbale action economy later
     public CombatSnapshot create(
         Creature self,
         List<Creature> combatants
@@ -80,15 +81,21 @@ public class CombatSnapshotFactory {
 
             List<Integer> legalTargets = new ArrayList<>();
 
-            for (Creature target : enemies) {
-                if (action.isValidTarget(target, self)) {
-                    legalTargets.add(target.getId());
+            if (action.getTargetingReqs().isSelfOnly()) {
+                if (action.isValidTarget(self, self)) {
+                    legalTargets.add(self.getId());
                 }
-            }
+            } else {
+                for (Creature target : enemies) {
+                    if (action.isValidTarget(target, self)) {
+                        legalTargets.add(target.getId());
+                    }
+                }
 
-            for (Creature target : allies) {
-                if (action.isValidTarget(target, self)) {
-                    legalTargets.add(target.getId());
+                for (Creature target : allies) {
+                    if (action.isValidTarget(target, self)) {
+                        legalTargets.add(target.getId());
+                    }
                 }
             }
 

@@ -34,7 +34,7 @@ public class CLIInputHandler implements InputHandler {
     public List<Creature> chooseTargets(Action action, List<Creature> combatants,
                                          Creature user) {
         List<Creature> validTargets = combatants.stream()
-                .filter(c -> c.isAlive() && c != user)
+                .filter(c -> c.isAlive())
                 .filter(c -> action.isValidTarget(c, user))
                 .collect(Collectors.toList());
 

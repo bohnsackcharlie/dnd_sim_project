@@ -2,6 +2,8 @@ package com.dndcombat.core.combat;
 
 import com.dndcombat.actions.Action;
 import com.dndcombat.actions.ActionType;
+import com.dndcombat.ai.ActionDecision;
+import com.dndcombat.ai.ResolvedActionDecision;
 import com.dndcombat.core.context.EffectContext;
 import com.dndcombat.core.creatures.Creature;
 import com.dndcombat.core.creatures.Monster;
@@ -87,70 +89,83 @@ public class CombatManager {
         currentTurn = creature;
         log.logTurnStart(creature);
 
-        // Reset action economy
         creature.resetActions();
 
-        // Trigger start-of-turn effects
-        creature.triggerEffects(EffectHook.START_OF_TURN,
-                new EffectContext(this, creature));
+        creature.triggerEffects(
+                EffectHook.START_OF_TURN,
+                new EffectContext(this, creature)
+        );
 
-        // Check if creature can still act
         if (creature.canAct()) {
-            processActionPhase(creature);
-            processBonusActionPhase(creature);
+            processAvailableActions(creature);
         }
 
         processTurnEnd(creature);
     }
 
-    private void processActionPhase(Creature creature) {
-        if (creature.isActionUsed()) return;
+    private List<Action> getAvailableTurnActions(Creature creature) {
+        List<Action> available = new ArrayList<>();
 
-        List<Action> actions = creature.getAvailableActions();
-        if (actions.isEmpty()) return;
-
-        Action chosen;
-        List<Creature> targets;
-
-        if (creature.getTeam() == Team.PARTY) {
-            chosen = inputHandler.chooseAction(actions, creature);
-            if (chosen == null) return;
-            targets = inputHandler.chooseTargets(chosen, combatants, creature);
-        } else if (creature instanceof Monster monster && monster.getAiStrategy() != null) {
-            chosen = monster.getAiStrategy().chooseAction(creature, combatants);
-            if (chosen == null) return;
-            targets = monster.getAiStrategy().chooseTargets(chosen, combatants, creature);
-        } else {
-            return;
+        if (!creature.isActionUsed()) {
+            available.addAll(creature.getAvailableActions());
         }
 
-        if (chosen != null && targets != null && !targets.isEmpty()) {
-            executeAction(creature, chosen, targets);
+        if (!creature.isBonusActionUsed()) {
+            available.addAll(creature.getAvailableBonusActions());
         }
+
+        return available.stream()
+                .filter(action -> action.canUse(creature))
+                .toList();
     }
 
-    private void processBonusActionPhase(Creature creature) {
-        if (creature.isBonusActionUsed()) return;
+    private void processAvailableActions(Creature creature) {
 
-        List<Action> bonusActions = creature.getAvailableBonusActions();
-        if (bonusActions.isEmpty()) return;
+        while (creature.canAct()) {
 
-        Action chosen;
-        List<Creature> targets;
+            List<Action> availableActions = getAvailableTurnActions(creature);
 
-        if (creature.getTeam() == Team.PARTY) {
-            chosen = inputHandler.chooseAction(bonusActions, creature);
-            if (chosen == null) return;
-            targets = inputHandler.chooseTargets(chosen, combatants, creature);
-        } else if (creature instanceof Monster monster && monster.getAiStrategy() != null) {
-            chosen = monster.getAiStrategy().chooseAction(creature, combatants);
-            if (chosen == null) return;
-            targets = monster.getAiStrategy().chooseTargets(chosen, combatants, creature);
-        } else {
-            return;
-        }
+            if (availableActions.isEmpty()) {
+                break;
+            }
 
-        if (chosen != null && targets != null && !targets.isEmpty()) {
+            Action chosen;
+            List<Creature> targets;
+
+            if (creature.getTeam() == Team.PARTY) {
+
+                chosen = inputHandler.chooseAction(availableActions, creature);
+                if (chosen == null) break;
+
+                targets = inputHandler.chooseTargets(
+                        chosen, combatants, creature
+                );
+
+            } else if (creature instanceof Monster monster
+                    && monster.getAiStrategy() != null) {
+
+                ResolvedActionDecision decision = monster.getAiStrategy()
+                        .chooseAction(creature, combatants);
+                System.out.println(decision);
+
+                if (decision == null) break;
+
+                chosen = decision.action();
+                targets = decision.targets();
+
+            } else {
+                break;
+            }
+
+            if (chosen == null || targets == null || targets.isEmpty()) {
+                break;
+            }
+
+            // Safety check: the selected action must still be available.
+            if (!availableActions.contains(chosen)) {
+                break;
+            }
+
             executeAction(creature, chosen, targets);
         }
     }

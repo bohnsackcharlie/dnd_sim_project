@@ -38,4 +38,8 @@ public class TargetingRequirements {
     public int getRange() {
         return range;
     }
+
+    public boolean isSelfOnly() {
+        return range == 0;
+    }
 }

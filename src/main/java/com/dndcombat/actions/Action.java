@@ -40,6 +40,7 @@ public abstract class Action {
     public boolean isValidTarget(Creature target, Creature user) {
         if (targetingReqs == null) return true;
         if (targetingReqs.isRequiresHostile() && !user.isHostileTo(target)) return false;
+        if (targetingReqs.isSelfOnly()) return target.equals(user);
         return target.isAlive();
     }
 
